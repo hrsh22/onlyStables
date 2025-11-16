@@ -18,6 +18,21 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
+## Environment Variables
+
+Create a `.env.local` file populated with the following keys:
+
+```
+OPENAI_API_KEY=sk-...
+ARKIV_PRIVATE_KEY=0x...
+ARKIV_RPC_URL=https://mendoza.hoodi.arkiv.network/rpc
+ARKIV_WS_URL=wss://mendoza.hoodi.arkiv.network/rpc/ws
+```
+
+- `OPENAI_API_KEY` powers the `/api/parse-payment` endpoint.
+- `ARKIV_PRIVATE_KEY` should be a dedicated server wallet used to write to Arkiv; never share this key.
+- `ARKIV_RPC_URL`/`ARKIV_WS_URL` can point to any Arkiv-compatible RPC (defaults fallback to Mendoza testnet if omitted).
+
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Learn More

@@ -1,12 +1,14 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
-import { useConnect, useAccount } from "wagmi";
+import { useConnect, useAccount, useSwitchChain } from "wagmi";
+import { bsc } from "wagmi/chains";
 
 export default function Home() {
     const router = useRouter();
     const { connect, connectors } = useConnect();
-    const { isConnected } = useAccount();
+    const { isConnected, chainId } = useAccount();
+    const { switchChain } = useSwitchChain();
     const shouldNavigateRef = useRef(false);
 
     useEffect(() => {
@@ -16,8 +18,18 @@ export default function Home() {
         }
     }, [isConnected, router]);
 
-    const connectMetaMask = () => {
+    const connectMetaMask = async () => {
         if (isConnected) {
+            // If already connected but not on BNB Chain, switch to BNB Chain
+            if (chainId && chainId !== bsc.id) {
+                try {
+                    await switchChain({ chainId: bsc.id });
+                } catch (error) {
+                    console.error("Failed to switch chain:", error);
+                    alert("Please switch to BNB Chain in MetaMask to continue.");
+                    return;
+                }
+            }
             router.push("/swap");
             return;
         }
@@ -26,7 +38,10 @@ export default function Home() {
 
         if (metaMaskConnector) {
             shouldNavigateRef.current = true;
-            connect({ connector: metaMaskConnector });
+            connect({
+                connector: metaMaskConnector,
+                chainId: bsc.id // Request BNB Chain on connect
+            });
         } else {
             alert("MetaMask is not installed. Please install MetaMask to continue.");
         }
@@ -58,7 +73,7 @@ export default function Home() {
                         {/* Contact Button */}
                         <button
                             onClick={connectMetaMask}
-                            className="border border-[#ff6b35] rounded-full px-6 py-2 text-[#ff6b35] font-medium text-base hover:bg-black hover:text-[#ff6b35] transition-colors">
+                            className="border border-[#ff6b35] rounded-full px-6 py-2 text-[#ff6b35] font-medium text-base hover:bg-black hover:text-[#ff6b35] transition-colors cursor-pointer">
                             SWAP STABLECOINS
                         </button>
                     </div>
@@ -86,7 +101,7 @@ export default function Home() {
                     <div className="bg-[#ff6b35] rounded-2xl sm:rounded-3xl lg:rounded-4xl p-4 sm:p-6 md:p-8 lg:p-12 xl:p-16 relative">
                         {/* Arrow Image */}
                         <div className="absolute top-4 sm:top-6 lg:top-8 right-4 sm:right-6 lg:right-8">
-                            <img src="/arrow.svg" alt="Arrow" className="w-12 h-12 sm:w-16 sm:h-16 lg:w-18 lg:h-18" />
+                            <img src="/arrow.png" alt="Arrow" className="w-12 h-12 sm:w-16 sm:h-16 lg:w-18 lg:h-18" />
                         </div>
 
                         {/* SWAP SMARTER Section */}
@@ -100,7 +115,7 @@ export default function Home() {
                                 {/* Wave Image */}
                                 <div className="relative -ml-8 sm:-ml-12 lg:-ml-16 hidden sm:block">
                                     <div className="h-72 sm:h-80 lg:h-96 flex items-start justify-start">
-                                        <img src="/wave.svg" alt="Wave illustration" className="h-full w-auto object-contain" />
+                                        <img src="/wave.svg" alt="Wave illustration" className="h-full w-auto object-contain brightness-0" />
                                     </div>
                                 </div>
 
@@ -144,11 +159,11 @@ export default function Home() {
                             </h2>
                             <div className="relative -ml-4 sm:-ml-6 md:-ml-8 lg:-ml-12 xl:-ml-16 -mr-4 sm:-mr-6 md:-mr-8 lg:-mr-12 xl:-mr-16 -mt-8 sm:-mt-12 md:-mt-16 lg:-mt-20 xl:-mt-24">
                                 <div className="h-48 sm:h-56 md:h-64 lg:h-72 xl:h-80 2xl:h-96 flex items-center justify-end">
-                                    <img src="/waveRight.svg" alt="Wave illustration" className="h-full w-auto object-contain" />
+                                    <img src="/waveRight.svg" alt="Wave illustration" className="h-full w-auto object-contain brightness-0" />
                                 </div>
                                 <button
                                     onClick={connectMetaMask}
-                                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border border-gray-900 rounded-full px-4 sm:px-6 py-1.5 sm:py-2 text-gray-900 font-medium text-sm sm:text-base hover:bg-black hover:text-[#ff6b35] transition-colors">
+                                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border border-gray-900 rounded-full px-4 sm:px-6 py-1.5 sm:py-2 text-gray-900 font-medium text-sm sm:text-base hover:bg-black hover:text-[#ff6b35] transition-colors cursor-pointer">
                                     START SWAPPING
                                 </button>
                             </div>
