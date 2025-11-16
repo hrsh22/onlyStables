@@ -128,8 +128,8 @@ export default function Home() {
                                     </p>
 
                                     <p className="text-gray-900 text-sm sm:text-base lg:text-lg leading-relaxed uppercase">
-                                        BUILT ON NEAR INTENTS, WE FOCUS EXCLUSIVELY ON STABLECOINS, MAKING CROSS-CHAIN SWAPS FASTER, CHEAPER, AND MORE
-                                        RELIABLE. MOVE YOUR USDC, USDT, AND OTHER STABLECOINS BETWEEN CHAINS WITHOUT THE COMPLEXITY.
+                                        BUILT ON THRESHOLD CRYPTOGRAPHY, WE FOCUS EXCLUSIVELY ON STABLECOINS, MAKING CROSS-CHAIN SWAPS FASTER,
+                                        CHEAPER, AND MORE RELIABLE. MOVE YOUR USDC, USDT, AND OTHER STABLECOINS BETWEEN CHAINS WITHOUT THE COMPLEXITY.
                                     </p>
                                 </div>
                             </div>
